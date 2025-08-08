@@ -1,13 +1,18 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Header Authorization (for Bearer token)
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # If not already in /public then move it in
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ /public/$1 [L,QSA]
 </IfModule>
 
-# Disable index view
-Options -Indexes
+# Disable index viewOptions -Indexes
 
-# Hide a specific file
+# Block access to sensitive files (.env, config.js, .gitignore,...)
 <Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock)$">
     Order allow,deny
     Deny from all
