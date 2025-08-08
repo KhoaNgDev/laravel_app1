@@ -13,10 +13,16 @@
 # Disable index viewOptions -Indexes
 
 # Block access to sensitive files (.env, config.js, .gitignore,...)
-<Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock)$">
+
+<FilesMatch "^vi\.json$">
+    Require all granted
+</FilesMatch>
+
+<Files ~ "\.(env|config.js|md|gitignore|gitattributes|lock)$">
     Order allow,deny
     Deny from all
 </Files>
+
 
 ## EXPIRES CACHING ##
 <IfModule mod_expires.c>
