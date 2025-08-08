@@ -131,15 +131,21 @@
             const url = id ? `/admin/products/update/${id}` : "{{ route('admin.products.store') }}";
             const formData = new FormData(this);
             if (id) formData.append('_method', 'PUT');
+
             const rawPrice = $('#product_price_format').val().replace(/[^\d]/g, '');
             $('#product_price').val(rawPrice);
+
+            const $saveBtn = $('#save-btn');
+            $saveBtn.prop('disabled', true);
+            $('#save-spinner').removeClass('d-none');
+            $('.save-text').text('Đang lưu...');
+
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: formData,
                 contentType: false,
                 processData: false,
-
                 success: function() {
                     Swal.fire({
                         icon: 'success',
@@ -175,9 +181,15 @@
                             confirmButtonText: 'Đóng'
                         });
                     }
+                },
+                complete: function() {
+                    $saveBtn.prop('disabled', false);
+                    $('#save-spinner').addClass('d-none');
+                    $('.save-text').text('Lưu');
                 }
             });
         });
+
 
         function forceResetModal($modal) {
             $modal.removeClass('show').removeAttr('style');
@@ -245,6 +257,19 @@
             $('#preview-image-prd').attr('src', '');
             $('#image-preview-wrapper').hide();
             $('#remove-image-flag').val(1);
+        });
+        $('#cancel-btn').on('click', function() {
+            const $btn = $(this);
+            $btn.prop('disabled', true);
+            $('#cancel-spinner').removeClass('d-none');
+            $('.cancel-text').text('Đang hủy...');
+
+            setTimeout(() => {
+                $('#product-modal').modal('hide');
+                $btn.prop('disabled', false);
+                $('#cancel-spinner').addClass('d-none');
+                $('.cancel-text').text('Hủy');
+            }, 500);
         });
 
     });

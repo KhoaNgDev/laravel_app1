@@ -55,9 +55,18 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel-btn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" id="cancel-spinner"></span>
+                        <span class="cancel-text">Hủy</span>
+                    </button>
+
+                    <button type="submit" class="btn btn-primary" id="save-btn">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" id="save-spinner"></span>
+                        <span class="save-text">Lưu</span>
+                    </button>
                 </div>
+
+
             </form>
         </div>
     </div>
