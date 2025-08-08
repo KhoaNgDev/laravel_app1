@@ -22,3 +22,4 @@ yarn-error.log
 /.vscode
 /.zed
 .htacess/public/uploads/
+/public/uploads/
