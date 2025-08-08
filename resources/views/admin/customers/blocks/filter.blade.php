@@ -56,18 +56,11 @@
         <form id="import-form" action="{{ route('admin.customers.import') }}" method="POST"
             enctype="multipart/form-data">
             @csrf
-            <input type="file" name="file" id="file-input" accept=".xlsx" hidden>
-
-            <button type="button" id="btn-import" class="btn btn-info btn-sm">
-                <span class="spinner-border spinner-border-sm d-none"></span>
-                <span class="btn-text">Chọn file Excel</span>
-            </button>
-
+            <input type="file" name="file" id="file-input" accept=".xlsx">
             <button type="button" id="remove-file" class="btn btn-danger btn-sm d-none">Xóa file</button>
-
-            <button type="submit" id="submit-import" class="btn btn-primary btn-sm d-none">Nhập Excel</button>
+            <span class="spinner-border spinner-border-sm d-none"></span>
+            <button type="submit" class="btn btn-primary btn-sm">Nhập Excel</button>
         </form>
-
         @error('file')
             <div class="text-danger mt-1">{{ $message }}</div>
         @enderror
