@@ -74,12 +74,38 @@
             });
         }
         $('#btn-search').off('click').on('click', () => {
-            tableProduct.draw();
+            const $btn = $('#btn-search');
+            const $spinner = $('#search-spinner');
+            const $text = $btn.find('.search-text');
+
+            $spinner.removeClass('d-none');
+            $text.addClass('d-none');
+            $btn.prop('disabled', true);
+
+            tableProduct.ajax.reload(() => {
+                $spinner.addClass('d-none');
+                $text.removeClass('d-none');
+                $btn.prop('disabled', false);
+            });
         });
+
         $('#btn-reset').off('click').on('click', () => {
+            const $btn = $('#btn-reset');
+            const $spinner = $('#reset-spinner');
+            const $text = $btn.find('.reset-text');
+
+            $spinner.removeClass('d-none');
+            $text.addClass('d-none');
+            $btn.prop('disabled', true);
+
             $('#filter-form')[0].reset();
-            tableProduct.draw();
+            tableProduct.ajax.reload(() => {
+                $spinner.addClass('d-none');
+                $text.removeClass('d-none');
+                $btn.prop('disabled', false);
+            });
         });
+
         $(document).on('mouseenter', '.product-hover', function() {
             const imageUrl = $(this).data('img');
             if (imageUrl) {
