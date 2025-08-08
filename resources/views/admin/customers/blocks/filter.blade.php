@@ -1,4 +1,4 @@
-<div class="card-header">
+<div class="card-header col-md-12">
     <div class="mb-3 bg-light p-3 rounded">
         <div id="filter-errors" class="alert alert-danger d-none">
             <ul class="mb-0" id="filter-errors-list"></ul>

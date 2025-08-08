@@ -95,10 +95,13 @@ class CustomerController extends Controller
             'file.mimes' => 'Chỉ cho phép file Excel có định dạng .xlsx hoặc .xls.',
         ]);
 
-
+        $tempPath = sys_get_temp_dir() . '/' . uniqid() . '.' . $request->file('file')->getClientOriginalExtension();
+        $request->file('file')->move(dirname($tempPath), basename($tempPath));
 
         $import = new CustomersImport;
-        Excel::import($import, $request->file('file'));
+        Excel::import($import, $tempPath);
+
+        @unlink($tempPath);
 
         if ($import->failures()->isNotEmpty()) {
             $errors = [];
@@ -111,6 +114,7 @@ class CustomerController extends Controller
 
         return back()->with('import_success', 'Import khách hàng thành công!');
     }
+
     public function store(StoreRequest $request)
     {
         DB::beginTransaction();
