@@ -35,13 +35,13 @@
                 <button type="button" class="btn btn-primary mr-2" id="btn-search">
                     <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
                         id="search-spinner"></span>
-                    <span class="search-text"><i class="fas fa-search"></i> Tìm kiếm</span>
+                    <span class="search-text"><i class="fas fa-search">Đang tìm...</i> Tìm kiếm</span>
                 </button>
 
                 <!-- Xóa tìm -->
                 <button type="button" class="btn btn-secondary mr-2" id="btn-reset">
                     <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
-                        id="reset-spinner"></span>
+                        id="reset-spinner">Đang thực hiện...</span>
                     <span class="reset-text"><i class="fas fa-times"></i> Xóa tìm</span>
                 </button>
 
