@@ -31,11 +31,18 @@
             </div>
             <div class="col-md-6 mb-2"></div>
             <div class="col-md-3 mb-2 d-flex align-items-end">
+                <!-- Tìm kiếm -->
                 <button type="button" class="btn btn-primary mr-2" id="btn-search">
-                    <i class="fas fa-search"></i> Tìm kiếm
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
+                        id="search-spinner"></span>
+                    <span class="search-text"><i class="fas fa-search"></i> Tìm kiếm</span>
                 </button>
+
+                <!-- Xóa tìm -->
                 <button type="button" class="btn btn-secondary mr-2" id="btn-reset">
-                    <i class="fas fa-times"></i> Xóa tìm
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"
+                        id="reset-spinner"></span>
+                    <span class="reset-text"><i class="fas fa-times"></i> Xóa tìm</span>
                 </button>
 
             </div>
