@@ -9,11 +9,15 @@ use App\Http\Requests\Admin\Customer\StoreRequest;
 use App\Http\Requests\Admin\Customer\UpdateRequest;
 use App\Models\MstCustomer;
 use App\Imports\CustomersImport;
+use Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Settings;
+use PhpOffice\PhpSpreadsheet\Reader\Exception as SpreadsheetException;
+use Maatwebsite\Excel\Validators\ValidationException as ExcelValidationException;
 
 class CustomerController extends Controller
 {
@@ -95,21 +99,21 @@ class CustomerController extends Controller
             'file.mimes' => 'Chỉ cho phép file Excel có định dạng .xlsx hoặc .xls.',
         ]);
 
-        $tempPath = sys_get_temp_dir() . '/' . uniqid() . '.' . $request->file('file')->getClientOriginalExtension();
-        $request->file('file')->move(dirname($tempPath), basename($tempPath));
-
         $import = new CustomersImport;
-        Excel::import($import, $tempPath);
 
-        @unlink($tempPath);
-
-        if ($import->failures()->isNotEmpty()) {
+        try {
+            Excel::import($import, $request->file('file'));
+        } catch (SpreadsheetException $e) {
+            return back()->withErrors(['file' => 'Tệp Excel không hợp lệ hoặc bị hỏng.']);
+        } catch (ExcelValidationException $e) {
+            $failures = $e->failures();
             $errors = [];
-            foreach ($import->failures() as $failure) {
+            foreach ($failures as $failure) {
                 $errors[] = 'Dòng ' . $failure->row() . ', cột <b>' . $failure->attribute() . '</b>: ' . implode(', ', $failure->errors());
             }
-
             return back()->with('import_failures', $errors);
+        } catch (Exception $e) {
+            return back()->withErrors(['file' => 'Tệp Excel không hợp lệ hoặc không thể xử lý.']);
         }
 
         return back()->with('import_success', 'Import khách hàng thành công!');
