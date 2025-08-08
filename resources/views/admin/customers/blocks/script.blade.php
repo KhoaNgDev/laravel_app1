@@ -18,7 +18,7 @@
         }
 
         $(document).ready(function() {
-            ['#btn-search', '#btn-export', '#btn-reset'].forEach(selector => {
+            ['#btn-search', '#btn-export-excel', '#btn-reset'].forEach(selector => {
                 const $btn = $(selector);
                 const original = $btn.find('.btn-text').html();
                 $btn.data('original-text', original);
