@@ -68,6 +68,7 @@
             <div id="import-loading" class="d-none mt-2">
                 <span class="spinner-border spinner-border-sm text-primary align-middle" role="status"></span>
                 <span class="ms-1 align-middle">Đang tải...</span>
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true">Đang tải</span>
             </div>
 
             <button type="submit" id="import-submit" class="btn btn-primary btn-sm mt-2">Nhập Excel</button>
@@ -94,8 +95,8 @@
             const submitBtn = document.getElementById('import-submit');
 
             form.addEventListener('submit', function() {
-                submitBtn.classList.add('d-none'); // Ẩn nút Nhập Excel
-                loading.classList.remove('d-none'); // Hiện spinner + Đang tải...
+                submitBtn.classList.add('d-none');
+                loading.classList.remove('d-none');
             });
 
             const fileInput = document.getElementById('file-input');
