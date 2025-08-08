@@ -67,8 +67,10 @@
 
             <div id="import-loading" class="d-none mt-2">
                 <span class="spinner-border spinner-border-sm text-primary align-middle" role="status"></span>
-                <span class="ms-1 align-middle">Đang tải...</span>
-                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true">Đang tải</span>
+                <div id="import-loading" class="d-none mt-2 d-flex align-items-center gap-2 text-primary fw-semibold">
+                    <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+                    <span>Đang tải dữ liệu, vui lòng chờ...</span>
+                </div>
             </div>
 
             <button type="submit" id="import-submit" class="btn btn-primary btn-sm mt-2">Nhập Excel</button>
