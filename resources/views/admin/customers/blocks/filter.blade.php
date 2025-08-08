@@ -59,11 +59,20 @@
         <form id="import-form" action="{{ route('admin.customers.import') }}" method="POST"
             enctype="multipart/form-data">
             @csrf
-            <input type="file" name="file" id="file-input" accept=".xlsx">
+
+            <input type="file" name="file" id="file-input" accept=".xlsx"
+                class="form-control form-control-sm mb-2">
+
             <button type="button" id="remove-file" class="btn btn-danger btn-sm d-none">Xóa file</button>
-            <span class="spinner-border spinner-border-sm d-none"></span>
-            <button type="submit" class="btn btn-primary btn-sm">Nhập Excel</button>
+
+            <div id="import-loading" class="d-none mt-2">
+                <span class="spinner-border spinner-border-sm text-primary align-middle" role="status"></span>
+                <span class="ms-1 align-middle">Đang tải...</span>
+            </div>
+
+            <button type="submit" id="import-submit" class="btn btn-primary btn-sm mt-2">Nhập Excel</button>
         </form>
+
         @error('file')
             <div class="text-danger mt-1">{{ $message }}</div>
         @enderror
@@ -77,3 +86,33 @@
 
     </div>
 </div>
+@push('scripts')
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('import-form');
+            const loading = document.getElementById('import-loading');
+            const submitBtn = document.getElementById('import-submit');
+
+            form.addEventListener('submit', function() {
+                submitBtn.classList.add('d-none'); // Ẩn nút Nhập Excel
+                loading.classList.remove('d-none'); // Hiện spinner + Đang tải...
+            });
+
+            const fileInput = document.getElementById('file-input');
+            const removeFileBtn = document.getElementById('remove-file');
+
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    removeFileBtn.classList.remove('d-none');
+                } else {
+                    removeFileBtn.classList.add('d-none');
+                }
+            });
+
+            removeFileBtn.addEventListener('click', function() {
+                fileInput.value = "";
+                removeFileBtn.classList.add('d-none');
+            });
+        });
+    </script>
+@endpush
