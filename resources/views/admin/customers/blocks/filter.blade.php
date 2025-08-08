@@ -37,6 +37,9 @@
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         <span class="btn-text"><i class="fas fa-search"></i> Tìm kiếm</span>
                     </button>
+                    <button type="button" class="btn btn-secondary mr-2" id="btn-reset">
+                        <i class="fas fa-times"></i> Xóa tìm
+                    </button>
 
                     <!-- Nút Xuất Excel -->
                     <button type="button" class="btn btn-success mr-2" id="btn-export-excel">

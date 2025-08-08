@@ -124,7 +124,7 @@
         });
 
 
-        $('#btn-export').off('click').on('click', function(e) {
+        $('#btn-export-excel').off('click').on('click', function(e) {
             e.preventDefault();
             const $btn = $(this);
 
@@ -137,9 +137,45 @@
 
             setTimeout(() => {
                 $('#export-form')[0].submit();
-                setLoading($btn,
-                    false);
+                setLoading($btn, false);
             }, 500);
+        });
+
+        $('#btn-import-excel').on('click', function() {
+            $('#file-input').click();
+        });
+
+        $('#file-input').on('change', function() {
+            if (this.files.length > 0) {
+                const $btn = $('#btn-import-excel');
+                setLoading($btn, true, 'Đang nhập...');
+                $('#remove-file').removeClass('d-none'); // Hiện nút xóa
+
+                const formData = new FormData($('#import-form')[0]);
+
+                $.ajax({
+                    url: $('#import-form').attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        Swal.fire('Thành công', res.message || 'Đã nhập dữ liệu',
+                        'success');
+                        $('#file-input').val('');
+                        $('#remove-file').addClass('d-none');
+                        table.ajax.reload(null, false);
+                    },
+                    error: function(xhr) {
+                        Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể nhập file',
+                            'error');
+                        setLoading($btn, false);
+                    },
+                    complete: function() {
+                        setLoading($btn, false);
+                    }
+                });
+            }
         });
 
         $(document).on('click', '.btn-edit', function() {
@@ -201,6 +237,7 @@
                         msg += `${errors[field][0]}<br>`;
                     }
                     Swal.fire('Lỗi!', msg, 'error');
+                  setLoading($btn, false);
                 }
             });
         });
