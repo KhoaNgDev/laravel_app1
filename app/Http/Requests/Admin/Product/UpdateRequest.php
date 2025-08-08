@@ -36,6 +36,8 @@ class UpdateRequest extends FormRequest
                 'required',
                 'numeric',
                 'min:0',
+                'max:100000000000000'
+
             ],
             'product_description' => [
                 'nullable',

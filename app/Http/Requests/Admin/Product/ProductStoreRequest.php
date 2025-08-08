@@ -37,7 +37,7 @@ class ProductStoreRequest extends FormRequest
                 'required',
                 'numeric',
                 'min:0',
-                'max:1000000000'
+                'max:10000000000000'
             ],
 
 
