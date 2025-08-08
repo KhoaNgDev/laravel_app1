@@ -75,36 +75,35 @@
         }
         $('#btn-search').off('click').on('click', () => {
             const $btn = $('#btn-search');
-            const $spinner = $('#search-spinner');
-            const $text = $btn.find('.search-text');
+            const $original = $btn.html();
 
-            $spinner.removeClass('d-none');
-            $text.addClass('d-none');
+            $btn.html(
+                `<span><span class="spinner-border spinner-border-sm mr-1" role="status"></span> Đang tìm kiếm...</span>`
+                );
             $btn.prop('disabled', true);
 
             tableProduct.ajax.reload(() => {
-                $spinner.addClass('d-none');
-                $text.removeClass('d-none');
+                $btn.html($original);
                 $btn.prop('disabled', false);
             });
         });
 
         $('#btn-reset').off('click').on('click', () => {
             const $btn = $('#btn-reset');
-            const $spinner = $('#reset-spinner');
-            const $text = $btn.find('.reset-text');
+            const $original = $btn.html();
 
-            $spinner.removeClass('d-none');
-            $text.addClass('d-none');
+            $btn.html(
+                `<span><span class="spinner-border spinner-border-sm mr-1" role="status"></span> Đang xóa tìm...</span>`
+                );
             $btn.prop('disabled', true);
 
             $('#filter-form')[0].reset();
             tableProduct.ajax.reload(() => {
-                $spinner.addClass('d-none');
-                $text.removeClass('d-none');
+                $btn.html($original);
                 $btn.prop('disabled', false);
             });
         });
+
 
         $(document).on('mouseenter', '.product-hover', function() {
             const imageUrl = $(this).data('img');
