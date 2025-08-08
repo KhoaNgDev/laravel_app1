@@ -40,11 +40,12 @@
               <div class="col-md-6 mb-2"></div>
               <div class="col-md-3 mb-2 d-flex align-items-end">
                   <button type="button" class="btn btn-primary mr-2" id="btn-search">
-                      <i class="fas fa-search"></i> Tìm kiếm
+                      <span class="btn-content"><i class="fas fa-search"></i> Tìm kiếm</span>
                   </button>
                   <button type="button" class="btn btn-secondary mr-2" id="btn-reset">
-                      <i class="fas fa-times"></i> Xóa tìm
+                      <span class="btn-content"><i class="fas fa-times"></i> Xóa tìm</span>
                   </button>
+
 
               </div>
           </form>

@@ -31,15 +31,37 @@
         });
 
         $('#btn-reset').off('click').on('click', function() {
-            $('#filter-form')[0].reset();
-            $('#users-table').DataTable().ajax.reload(null, false);
-        });
+            const $btn = $(this);
+            const $original = $btn.html();
 
+            $btn.html(
+                `<span><span class="spinner-border spinner-border-sm mr-1" role="status"></span> Đang xóa tìm...</span>`
+            );
+            $btn.prop('disabled', true);
+
+            $('#filter-form')[0].reset();
+            $('#users-table').DataTable().ajax.reload(() => {
+                $btn.html($original);
+                $btn.prop('disabled', false);
+            });
+        });
         let searchTimeout;
+
         $('#btn-search').off('click').on('click', function() {
+            const $btn = $(this);
+            const $original = $btn.html();
+
+            $btn.html(
+                `<span><span class="spinner-border spinner-border-sm mr-1" role="status"></span> Đang tìm kiếm...</span>`
+            );
+            $btn.prop('disabled', true);
+
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                $('#users-table').DataTable().ajax.reload();
+                $('#users-table').DataTable().ajax.reload(() => {
+                    $btn.html($original);
+                    $btn.prop('disabled', false);
+                });
             }, 300);
         });
 
@@ -104,7 +126,7 @@
                 },
                 error: function(xhr) {
                     let msg = 'Đã xảy ra lỗi. Vui lòng thử lại!';
-                    if(xhr.status === 422 && xhr.responseJSON.errors) {
+                    if (xhr.status === 422 && xhr.responseJSON.errors) {
                         msg = '<ul style="text-align:left;">';
                         for (const field in xhr.responseJSON.errors) {
                             xhr.responseJSON.errors[field].forEach(error => {
@@ -112,8 +134,7 @@
                             });
                         }
                         msg += '</ul>';
-                    }
-                    else if (xhr.responseJSON?.message) {
+                    } else if (xhr.responseJSON?.message) {
                         msg =
                             `<strong>Lỗi hệ thống:</strong><br>${xhr.responseJSON.message}`;
                     }

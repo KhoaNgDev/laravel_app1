@@ -2,6 +2,29 @@
 <script type="text/javascript">
     var table;
     $(function() {
+        function setLoading($btn, isLoading, loadingText = 'Đang xử lý...') {
+            const $spinner = $btn.find('.spinner-border');
+            const $text = $btn.find('.btn-text');
+
+            if (isLoading) {
+                $btn.prop('disabled', true);
+                $spinner.removeClass('d-none');
+                $text.text(loadingText);
+            } else {
+                $btn.prop('disabled', false);
+                $spinner.addClass('d-none');
+                $text.html($btn.data('original-text'));
+            }
+        }
+
+        $(document).ready(function() {
+            ['#btn-search', '#btn-export', '#btn-reset'].forEach(selector => {
+                const $btn = $(selector);
+                const original = $btn.find('.btn-text').html();
+                $btn.data('original-text', original);
+            });
+        });
+
         if (!$.fn.DataTable.isDataTable('#customers-table')) {
             table = $('#customers-table').DataTable({
                 lengthMenu: [
@@ -68,7 +91,9 @@
             });
         }
         $('#btn-search').off('click').on('click', function() {
+            const $btn = $(this);
             const name = $('#filter_name').val();
+
             if (name && !/^[\p{L}\s]+$/u.test(name)) {
                 Swal.fire({
                     icon: 'error',
@@ -77,21 +102,46 @@
                 });
                 return;
             }
+
+            setLoading($btn, true, 'Đang tìm...');
             table.ajax.reload(null, false);
-        });
-        $('#btn-reset').off('click').on('click', function() {
-            $('#filter-form')[0].reset();
-            table.ajax.reload(null, false);
+
+            table.one('draw', function() {
+                setLoading($btn, false);
+            });
         });
 
-        $('#btn-export').click(function(e) {
+        $('#btn-reset').off('click').on('click', function() {
+            const $btn = $(this);
+            setLoading($btn, true, 'Đang xóa...');
+
+            $('#filter-form')[0].reset();
+            table.ajax.reload(null, false);
+
+            table.one('draw', function() {
+                setLoading($btn, false);
+            });
+        });
+
+
+        $('#btn-export').off('click').on('click', function(e) {
             e.preventDefault();
+            const $btn = $(this);
+
+            setLoading($btn, true, 'Đang xuất...');
+
             $('#export-form input[name="customer_name"]').val($('#filter_name').val());
             $('#export-form input[name="email"]').val($('#filter_email').val());
             $('#export-form input[name="address"]').val($('#filter_address').val());
             $('#export-form input[name="is_active"]').val($('#filter_status').val());
-            $('#export-form')[0].submit();
+
+            setTimeout(() => {
+                $('#export-form')[0].submit();
+                setLoading($btn,
+                    false);
+            }, 500);
         });
+
         $(document).on('click', '.btn-edit', function() {
             const row = $(this).closest('tr');
             const id = $(this).data('id');
@@ -157,6 +207,10 @@
         $(document).on('click', '.btn-cancel', function() {
             table.ajax.reload(null, false);
         });
+        $('#btn-import').on('click', function() {
+            $('#file-input').click(); // Mở cửa sổ chọn file
+        });
+
     });
     $(document).ready(function() {
         $('#form-create-customer').off('submit').on('submit', function(e) {
@@ -203,11 +257,33 @@
             });
         });
     });
+
     $('#file-input').on('change', function() {
         if (this.files.length > 0) {
-            $('#remove-file').removeClass('d-none');
-        } else {
-            $('#remove-file').addClass('d-none');
+            const $btn = $('#btn-import');
+            setLoading($btn, true, 'Đang nhập...');
+
+            const formData = new FormData($('#import-form')[0]);
+
+            $.ajax({
+                url: $('#import-form').attr('action'),
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    Swal.fire('Thành công', res.message || 'Đã nhập dữ liệu', 'success');
+                    $('#file-input').val('');
+                    $('#remove-file').addClass('d-none');
+                    table.ajax.reload(null, false);
+                },
+                error: function(xhr) {
+                    Swal.fire('Lỗi', xhr.responseJSON?.message || 'Không thể nhập file', 'error');
+                },
+                complete: function() {
+                    setLoading($btn, false);
+                }
+            });
         }
     });
 

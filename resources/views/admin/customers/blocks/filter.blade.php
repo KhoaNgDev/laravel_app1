@@ -31,25 +31,43 @@
             </div>
 
             <div class="col-md-12 mb-2 d-flex align-items-end">
-                <button type="button" class="btn btn-primary mr-2" id="btn-search">
-                    <i class="fas fa-search"></i> Tìm kiếm
-                </button>
-                <button type="button" class="btn btn-secondary mr-2" id="btn-reset">
-                    <i class="fas fa-times"></i> Xóa tìm
-                </button>
-                <button type="submit" class="btn btn-success" id="btn-export">
-                    <i class="fas fa-file-excel"></i> Xuất Excel
-                </button>
+                <div class="d-flex mb-3">
+                    <!-- Nút Tìm kiếm -->
+                    <button type="button" class="btn btn-primary mr-2" id="btn-search">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span class="btn-text"><i class="fas fa-search"></i> Tìm kiếm</span>
+                    </button>
+
+                    <!-- Nút Xuất Excel -->
+                    <button type="button" class="btn btn-success mr-2" id="btn-export-excel">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span class="btn-text"><i class="fas fa-file-excel"></i> Xuất Excel</span>
+                    </button>
+
+                    <!-- Nút Nhập Excel -->
+                    <button type="button" class="btn btn-info" id="btn-import-excel">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span class="btn-text"><i class="fas fa-upload"></i> Nhập Excel</span>
+                    </button>
+                </div>
 
             </div>
         </form>
         <form id="import-form" action="{{ route('admin.customers.import') }}" method="POST"
             enctype="multipart/form-data">
             @csrf
-            <input type="file" name="file" id="file-input" accept=".xlsx">
+            <input type="file" name="file" id="file-input" accept=".xlsx" hidden>
+
+            <button type="button" id="btn-import" class="btn btn-info btn-sm">
+                <span class="spinner-border spinner-border-sm d-none"></span>
+                <span class="btn-text">Chọn file Excel</span>
+            </button>
+
             <button type="button" id="remove-file" class="btn btn-danger btn-sm d-none">Xóa file</button>
-            <button type="submit" class="btn btn-primary btn-sm">Nhập Excel</button>
+
+            <button type="submit" id="submit-import" class="btn btn-primary btn-sm d-none">Nhập Excel</button>
         </form>
+
         @error('file')
             <div class="text-danger mt-1">{{ $message }}</div>
         @enderror
